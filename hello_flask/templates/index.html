@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CorreKt</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/index.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>CorreKt</h1>
+    </header>
+    <div class="container">
+        <p>
+            A simple program whereby you write a text in Kinyarwanda and when you
+            click submit, you get a corrected text if there were some errors.
+        </p>
+        <form onsubmit="return false">
+            <textarea id="text" placeholder="Enter up to 1000 words"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="output" id="output">
+            <!-- Display corrected text here -->
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("form").on("submit", function (event) {
+                var rawText = $("#text").val();
+                console.log(rawText)
+                $("#text").val("");
+                $("#output").html("");
+                $.ajax({
+                    data: {
+                        msg: rawText,
+                    },
+                    type: "POST",
+                    url: "/",
+                }).done(function (data) {
+                    var outputHtml = "<p><strong>Improved text:</strong><br><br> " + data + "</p>";
+                    $("#output").append($.parseHTML(outputHtml));
+                });
+                event.preventDefault();
+            });
+        });
+    </script>
+</body>
+
+</html>
